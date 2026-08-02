@@ -24,3 +24,5 @@ jobs:
             Классифицируй issue: тип (bug/feature/docs/question), приоритет (high/medium/low),
             возможные дубликаты. Только комментарий с классификацией — НЕ меняй код и не закрывай issue.
           use_github_token: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
