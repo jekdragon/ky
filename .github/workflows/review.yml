@@ -19,6 +19,7 @@ jobs:
       id-token: write
     if: contains(github.event.comment.body, '/review') || github.event_name == 'workflow_dispatch'
     steps:
+      - uses: actions/checkout@v4
       - uses: anomalyco/opencode/github@latest
         with:
           model: opencode/deepseek-v4-flash-free

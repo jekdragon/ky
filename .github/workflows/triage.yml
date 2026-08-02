@@ -17,6 +17,7 @@ jobs:
       issues: write
       id-token: write
     steps:
+      - uses: actions/checkout@v4
       - uses: anomalyco/opencode/github@latest
         with:
           model: opencode/deepseek-v4-flash-free
