@@ -1,0 +1,29 @@
+name: OpenCode Review
+on:
+  pull_request_review_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to review"
+        required: true
+        type: number
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    if: contains(github.event.comment.body, '/review') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/deepseek-v4-flash-free
+          agent: build
+          prompt: |
+            Ревью PR: найди баги, проблемы безопасности, ухудшения производительности.
+            Ответь кратко, по пунктам, severity-тегами. Не трогай код — только ревью.
+          use_github_token: true

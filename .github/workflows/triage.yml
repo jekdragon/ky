@@ -1,0 +1,26 @@
+name: OpenCode Triage
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Issue number to triage"
+        required: true
+        type: number
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      - uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/deepseek-v4-flash-free
+          prompt: |
+            Классифицируй issue: тип (bug/feature/docs/question), приоритет (high/medium/low),
+            возможные дубликаты. Только комментарий с классификацией — НЕ меняй код и не закрывай issue.
+          use_github_token: true

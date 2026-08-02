@@ -1,0 +1,22 @@
+name: OpenCode Docs Drift
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: anomalyco/opencode/github@latest
+        with:
+          model: opencode/deepseek-v4-flash-free
+          prompt: |
+            Проверь дрейф документации vs код: изменились ли API/поведение, но доки не обновлены.
+            Если расхождения есть — открой PR с обновлением доков. Если нет — не делай ничего.
+          use_github_token: true
