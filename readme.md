@@ -746,7 +746,7 @@ The function receives these arguments:
   - `percent` is a number between 0 and 1 representing the progress percentage.
   - `transferredBytes` is the number of bytes transferred so far.
   - `totalBytes` is the total number of bytes to be transferred. This is an estimate and may be 0 if the total size cannot be determined.
-- `chunk` is an instance of `Uint8Array` containing the data that was received. Note: It's empty for the first call.
+- `chunk` is an instance of `Uint8Array` containing the data that was received. The first progress event carries the first chunk received.
 
 ```js
 import ky from 'ky';
@@ -775,7 +775,7 @@ The function receives these arguments:
   - `percent` is a number between 0 and 1 representing the progress percentage.
   - `transferredBytes` is the number of bytes transferred so far.
   - `totalBytes` is the total number of bytes to be transferred. This is an estimate and may be 0 if the total size cannot be determined.
-- `chunk` is an instance of `Uint8Array` containing the data that was sent. Note: It's empty for the last call.
+- `chunk` is an instance of `Uint8Array` containing the data that was sent. The final progress event carries the last chunk sent.
 
 ```js
 import ky from 'ky';
@@ -1559,7 +1559,7 @@ const response = await ky('https://example.com', {
 
 ### Streaming request bodies
 
-To send a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) as the request body, you must pass `duplex: 'half'` per the [Fetch spec](https://fetch.spec.whatwg.org/#dom-requestinit-duplex). Ky can't set this automatically as it changes request semantics for all requests, not just streaming ones.
+To send a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) as the request body, `duplex: 'half'` is required per the [Fetch spec](https://fetch.spec.whatwg.org/#dom-requestinit-duplex). Ky automatically sets this option when the runtime supports streaming request bodies, so you generally don't need to pass it yourself.
 
 ```js
 import ky from 'ky';
@@ -1612,7 +1612,7 @@ for await (const commit of paginate(url, {fetchFunction: ky})) {
 
 ### Extending types
 
-Ky's TypeScript types are intentionally defined as type aliases rather than interfaces to prevent global module augmentation, which can lead to type conflicts and unexpected behavior across your codebase. If you need to add custom properties to Ky's types like `KyResponse` or `HTTPError`, create local wrapper types instead:
+Ky's TypeScript types are intentionally defined as type aliases rather than interfaces, which prevents declaration merging and avoids type conflicts across your codebase. (A few option types, such as `Options` and `NormalizedOptions`, are exceptions and are kept as interfaces for extensibility.) If you need to add custom properties to Ky's types like `KyResponse` or `HTTPError`, create local wrapper types instead:
 
 ```ts
 import ky, {HTTPError, isHTTPError} from 'ky';
