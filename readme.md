@@ -746,7 +746,7 @@ The function receives these arguments:
   - `percent` is a number between 0 and 1 representing the progress percentage.
   - `transferredBytes` is the number of bytes transferred so far.
   - `totalBytes` is the total number of bytes to be transferred. This is an estimate and may be 0 if the total size cannot be determined.
-- `chunk` is an instance of `Uint8Array` containing the data that was received. Note: It's empty for the first call.
+- `chunk` is an instance of `Uint8Array` containing the data that was received.
 
 ```js
 import ky from 'ky';
@@ -775,7 +775,7 @@ The function receives these arguments:
   - `percent` is a number between 0 and 1 representing the progress percentage.
   - `transferredBytes` is the number of bytes transferred so far.
   - `totalBytes` is the total number of bytes to be transferred. This is an estimate and may be 0 if the total size cannot be determined.
-- `chunk` is an instance of `Uint8Array` containing the data that was sent. Note: It's empty for the last call.
+- `chunk` is an instance of `Uint8Array` containing the data that was sent.
 
 ```js
 import ky from 'ky';
@@ -1559,7 +1559,7 @@ const response = await ky('https://example.com', {
 
 ### Streaming request bodies
 
-To send a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) as the request body, you must pass `duplex: 'half'` per the [Fetch spec](https://fetch.spec.whatwg.org/#dom-requestinit-duplex). Ky can't set this automatically as it changes request semantics for all requests, not just streaming ones.
+To send a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) as the request body, the [Fetch spec](https://fetch.spec.whatwg.org/#dom-requestinit-duplex) requires the `duplex: 'half'` option. Ky automatically sets `duplex: 'half'` when the runtime supports request streams, so it's not necessary to pass it yourself, but doing so is harmless.
 
 ```js
 import ky from 'ky';
